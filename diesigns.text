@@ -1,0 +1,153 @@
+design to be added in pages
+======================================== 1st design ========================================
+|starting html part|
+  <nav>
+    <div class="nav-content">
+      <div class="toggle-btn">
+        <i class='bx bx-plus'></i>
+      </div>
+      <span style="--i:1;">
+        <a href="#"><i class='bx bxs-home'></i></a>
+      </span>
+      <span style="--i:2;">
+        <a href="#"><i class='bx bxs-user'></i></a>
+      </span>
+      <span style="--i:3;">
+        <a href="#"><i class='bx bxs-detail'></i></a>
+      </span>
+      <span style="--i:4;">
+        <a href="#"><i class='bx bxs-conversation'></i></a>
+      </span>
+      <span style="--i:5;">
+        <a href="#"><i class='bx bxs-game'></i></a>
+      </span>
+    </div>
+  </nav>
+|ending html part|
+===============================================================================
+
+===============================================================================
+|scss part|
+    nav{
+      position: absolute;
+      top: 150px;
+      right: 0;
+      width: 80px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+    }
+
+    nav .nav-content{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(-45deg);
+    }
+
+    .nav-content .toggle-btn{
+      height: 60px;
+      width: 60px;
+      background: var(--color-grey-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: var(--box-shadow-1);
+    }
+    .nav-content span a{
+      height: 60px;
+      width: 60px;
+      background: var(--color-grey-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: var(--box-shadow-1);
+    }
+
+
+.nav-content .toggle-btn{
+  font-size: 35px;
+  color: var(--color-grey-2);
+  z-index: 100;
+  cursor: pointer;
+  transform: rotate(-225deg);
+  transition: all 0.6s ease;
+}
+
+nav.open .toggle-btn{
+  opacity: 1;
+  transform: rotate(0deg);
+}
+
+.nav-content span{
+  position: absolute;
+  transition: all 0.6s ease;
+  opacity: 0;
+}
+
+nav.open .nav-content span{
+  transform: rotate(calc(var(--i) * (360deg/8))) translateY(120px);
+  opacity: 1;
+}
+
+.nav-content span a{
+  text-decoration: none;
+  transform: rotate(45deg);
+}
+
+.nav-content span a i{
+  font-size: 24px;
+  color: var(--color-grey-2);
+  transform: rotate(calc(var(--i) * (360deg/ -8)));
+  opacity: 0.3;
+  transition: 0.2s;
+  pointer-events: none;
+}
+
+.nav-content span a:hover i {
+  opacity : 1;
+}
+|ending scss part|
+=========================================================================================
+
+==========================================================================================
+|js part|
+const nav = document.querySelector("nav");
+const toggleBtn = nav.querySelector(".toggle-btn");
+
+  toggleBtn.addEventListener("click" , () =>{
+    nav.classList.toggle("open");
+  });
+
+
+
+// js code to make draggable nav
+function onDrag({movementY}) { //movementY gets mouse vertical value
+  const navStyle = window.getComputedStyle(nav), //getting all css style of nav
+        navTop = parseInt(navStyle.top), // getting nav top value & convert it into string
+        navHeight = parseInt(navStyle.height), // getting nav height value & convert it into string
+        windHeight = window.innerHeight; // getting window height
+
+  nav.style.top = navTop > 0 ? `${navTop + movementY}px` : "1px";
+  if(navTop > windHeight - navHeight){
+    nav.style.top = `${windHeight - navHeight}px`;
+  }
+}
+
+//this function will call when user click mouse's button and  move mouse on nav
+nav.addEventListener("mousedown", () =>{
+  nav.addEventListener("mousemove", onDrag);
+});
+
+//these function will call when user relase mouse button and leave mouse from nav
+nav.addEventListener("mouseup", () =>{
+  nav.removeEventListener("mousemove", onDrag);
+});
+nav.addEventListener("mouseleave", () =>{
+  nav.removeEventListener("mousemove", onDrag);
+});
+===============================================================================================
